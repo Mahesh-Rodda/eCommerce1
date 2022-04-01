@@ -50,10 +50,11 @@ public class FulfilmentService {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent()) {
             PackingEntity packingEntity = new PackingEntity(orderEntity.get().getOrderCode(), "Accepted");
-            packingRepo.save(packingEntity);
             if (orderEntity.get().getOrderStatus().equalsIgnoreCase("RECEIVED"))
-            {orderEntity.get().setOrderStatus("PROCESSING");}
+            {orderEntity.get().setOrderStatus("PROCESSING");
             orderRepo.saveAndFlush(orderEntity.get());
+                packingRepo.save(packingEntity);
+            }
             return orderEntity.get().getOrderCode() + " IS ACCEPTED";
         }
         return orderCode + " IS NOT EXISTS";
@@ -66,9 +67,9 @@ public class FulfilmentService {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
             if (packingEntity.isPresent()) {
                 packingEntity.get().setStatus(status);
-                packingRepo.save(packingEntity.get());
                 if (packingEntity.get().getStatus().equalsIgnoreCase("PACKING") &&  orderEntity.get().getOrderStatus().equalsIgnoreCase("PROCESSING")) {
                     orderEntity.get().setOrderStatus("PACKING");
+                    packingRepo.save(packingEntity.get());
                     orderRepo.save(orderEntity.get());
                 }
                 return "STATUS UPDATED";
@@ -84,11 +85,11 @@ public class FulfilmentService {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
             if (packingEntity.isPresent()) {
                 ShippingEntity shippingEntity = new ShippingEntity(packingEntity.get().getOrderCode(), "Accepted");
-                shippingRepo.save(shippingEntity);
                 packingEntity.get().setStatus("Completed");
-                packingRepo.save(packingEntity.get());
                 if (orderEntity.get().getOrderStatus().equalsIgnoreCase("PACKING")) {
                     orderEntity.get().setOrderStatus("SHIPPING");
+                    shippingRepo.save(shippingEntity);
+                    packingRepo.save(packingEntity.get());
                     orderRepo.save(orderEntity.get());
                 }
                 return packingEntity.get().getOrderCode() + " IS ACCEPTED";
@@ -106,10 +107,10 @@ public class FulfilmentService {
                 Optional<ShippingEntity> shippingEntity = shippingRepo.findById(packingEntity.get().getOrderCode());
                 if (shippingEntity.isPresent()){
                     shippingEntity.get().setStatus(status);
-                    shippingRepo.save(shippingEntity.get());
                     if (shippingEntity.get().getStatus().equalsIgnoreCase("DELIVERED") && orderEntity.get().getOrderStatus().equalsIgnoreCase("SHIPPING")){
                         orderEntity.get().setOrderStatus("DELIVERED");
-                    orderRepo.save(orderEntity.get());
+                        orderRepo.save(orderEntity.get());
+                        shippingRepo.save(shippingEntity.get());
                     }
                     return shippingEntity.get().getOrderCode()+" IS UPDATED";
                 }
