@@ -51,7 +51,8 @@ public class FulfilmentService {
         if (orderEntity.isPresent()) {
             PackingEntity packingEntity = new PackingEntity(orderEntity.get().getOrderCode(), "Accepted");
             packingRepo.save(packingEntity);
-            orderEntity.get().setOrderStatus("PROCESSING");
+            if (orderEntity.get().getOrderStatus().equalsIgnoreCase("RECEIVED"))
+            {orderEntity.get().setOrderStatus("PROCESSING");}
             orderRepo.saveAndFlush(orderEntity.get());
             return orderEntity.get().getOrderCode() + " IS ACCEPTED";
         }
@@ -66,7 +67,7 @@ public class FulfilmentService {
             if (packingEntity.isPresent()) {
                 packingEntity.get().setStatus(status);
                 packingRepo.save(packingEntity.get());
-                if (packingEntity.get().getStatus().equalsIgnoreCase("PACKING")) {
+                if (packingEntity.get().getStatus().equalsIgnoreCase("PACKING") &&  orderEntity.get().getOrderStatus().equalsIgnoreCase("PROCESSING")) {
                     orderEntity.get().setOrderStatus("PACKING");
                     orderRepo.save(orderEntity.get());
                 }
@@ -86,7 +87,7 @@ public class FulfilmentService {
                 shippingRepo.save(shippingEntity);
                 packingEntity.get().setStatus("Completed");
                 packingRepo.save(packingEntity.get());
-                if (packingEntity.get().getStatus().equalsIgnoreCase("Completed") && shippingEntity.getStatus().equalsIgnoreCase("Accepted")) {
+                if (orderEntity.get().getOrderStatus().equalsIgnoreCase("PACKING")) {
                     orderEntity.get().setOrderStatus("SHIPPING");
                     orderRepo.save(orderEntity.get());
                 }
@@ -106,7 +107,7 @@ public class FulfilmentService {
                 if (shippingEntity.isPresent()){
                     shippingEntity.get().setStatus(status);
                     shippingRepo.save(shippingEntity.get());
-                    if (shippingEntity.get().getStatus().equalsIgnoreCase("DELIVERED")){
+                    if (shippingEntity.get().getStatus().equalsIgnoreCase("DELIVERED") && orderEntity.get().getOrderStatus().equalsIgnoreCase("SHIPPING")){
                         orderEntity.get().setOrderStatus("DELIVERED");
                     orderRepo.save(orderEntity.get());
                     }
