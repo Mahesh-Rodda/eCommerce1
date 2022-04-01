@@ -6,6 +6,7 @@ import com.cjss.eCommerce1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,8 +36,8 @@ public class FulfilmentService {
                 OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVED", skuEntity.get());
                 inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
                 // when we ordered from cart the element will delete from cart
-               Optional <CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
-                if (a.isPresent()){cartRepo.deleteById(a.get().getCartCode());}
+               List<CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
+                if (!a.isEmpty()){a.stream().forEach(e -> cartRepo.deleteById(e.getCartCode()));}
                 inventoryRepo.save(inventoryEntity);
                 orderRepo.save(orderEntity);
                 return "YOUR ORDER " + orderEntity.getOrderCode() + " IS PLACED SUCCESSFULLY";
@@ -56,7 +57,7 @@ public class FulfilmentService {
             packingRepo.save(packingEntity);
             return orderEntity.get().getOrderCode() + " IS ACCEPTED";
             }
-            return orderEntity.get().getOrderCode()+" ORDER NOT RECEIVED";
+            return orderEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
         }
         return orderCode + " IS NOT EXISTS";
 
@@ -98,7 +99,7 @@ public class FulfilmentService {
                     orderRepo.save(orderEntity.get());
                     return shippingEntity.getOrderCode()+ " IS ACCEPTED";
                 }
-                return packingEntity.get().getOrderCode()+"IS NOT COMPLETED PACKING";
+                return packingEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
             }
             return orderEntity.get().getOrderCode() + " IS NOT IN PACKING DEPARTMENT";
         }
@@ -119,7 +120,7 @@ public class FulfilmentService {
                         shippingRepo.save(shippingEntity.get());
                         return shippingEntity.get().getOrderCode()+" IS UPDATED";
                     }
-                    return shippingEntity.get().getOrderCode()+" IS NOT SHIPPED";
+                    return shippingEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
                 }
                 return packingEntity.get().getOrderCode()+"IS NOT EXISTS IN SHIPPING DEPT";
             }
