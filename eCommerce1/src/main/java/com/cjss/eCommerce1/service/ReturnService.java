@@ -30,20 +30,6 @@ public class ReturnService {
     @Autowired
     private ReturnRepo returnRepo;
 
-//    public String initReturn(String orderCode,String status){
-//        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
-//        if (orderEntity.isPresent()){
-//            if(orderEntity.get().getOrderStatus().equalsIgnoreCase("DELIVERED"))
-//            {orderEntity.get().setOrderStatus("RETURN INITIATED");
-//            ReturnEntity returnEntity = new ReturnEntity(orderEntity.get().getOrderCode(),"INIT RETURN");
-//            orderRepo.save(orderEntity.get());
-//            returnRepo.save(returnEntity);
-//            return returnEntity.getOrderCode()+" IS INITIATED FOR RETURN";
-//            }
-//            return  " wait until the order delivery "+orderEntity.get().getOrderCode();
-//        }
-//    return  " you have to order first \n"+orderCode+" IS NOT EXISTS";
-//    }
     public String updateReturn(String orderCode, String status){
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent() && status.equalsIgnoreCase("RETURN")){
@@ -80,22 +66,4 @@ public class ReturnService {
     }
         return orderCode+" IS NOT EXISTS";
     }
-
-   /* public String returned(String orderCode){
-        Optional<ReturnEntity> returnEntity = returnRepo.findById(orderCode);
-        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
-        if (returnEntity.isPresent() && orderEntity.isPresent()){
-            if (orderEntity.get().getOrderStatus().equalsIgnoreCase("RETURN ACCEPTED")){
-                returnEntity.get().setStatus("RETURNED");
-                orderEntity.get().setOrderStatus("RETURNED");
-                InventoryEntity inventoryEntity = inventoryRepo.getById(orderEntity.get().getSkuEntity().getSkuCode());
-                inventoryEntity.setQuantity(inventoryEntity.getQuantity()+orderEntity.get().getQuantity());
-                inventoryRepo.save(inventoryEntity);
-                return "RETURNED";
-            }
-            return returnEntity.get().getOrderCode()+"RETURN NOT ACCEPTED";
-
-        }
-        return  orderCode+" IS NOT EXISTS";
-    }*/
 }

@@ -53,9 +53,10 @@ public class FulfilmentService {
             if (orderEntity.get().getOrderStatus().equalsIgnoreCase("RECEIVED"))
             {orderEntity.get().setOrderStatus("PROCESSING");
             orderRepo.saveAndFlush(orderEntity.get());
-                packingRepo.save(packingEntity);
-            }
+            packingRepo.save(packingEntity);
             return orderEntity.get().getOrderCode() + " IS ACCEPTED";
+            }
+            return orderEntity.get().getOrderCode()+" ORDER NOT RECEIVED";
         }
         return orderCode + " IS NOT EXISTS";
 
@@ -71,8 +72,14 @@ public class FulfilmentService {
                     orderEntity.get().setOrderStatus("PACKING");
                     packingRepo.save(packingEntity.get());
                     orderRepo.save(orderEntity.get());
+                    return "STATUS UPDATED AS PACKING";
                 }
-                return "STATUS UPDATED";
+                else if (status.equalsIgnoreCase("Completed") && orderEntity.get().getOrderStatus().equalsIgnoreCase("PACKING")){
+                    packingEntity.get().setStatus("Completed");
+                    packingRepo.save(packingEntity.get());
+                    return "STATUS UPDATED AS COMPLETED";
+                }
+                return orderEntity.get().getOrderCode()+" IS NOT ACCEPTED BY PACKING DEPT...";
             }
             return orderEntity.get().getOrderCode() + " IS NOT EXISTS IN PACKING DEPARTMENT";
         }
@@ -84,15 +91,14 @@ public class FulfilmentService {
         if (orderEntity.isPresent()) {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
             if (packingEntity.isPresent()) {
-                ShippingEntity shippingEntity = new ShippingEntity(packingEntity.get().getOrderCode(), "Accepted");
-                packingEntity.get().setStatus("Completed");
-                if (orderEntity.get().getOrderStatus().equalsIgnoreCase("PACKING")) {
+                if (orderEntity.get().getOrderStatus().equalsIgnoreCase("PACKING") && packingEntity.get().getStatus().equalsIgnoreCase("Completed")) {
+                    ShippingEntity shippingEntity = new ShippingEntity(packingEntity.get().getOrderCode(), "Accepted");
                     orderEntity.get().setOrderStatus("SHIPPING");
                     shippingRepo.save(shippingEntity);
-                    packingRepo.save(packingEntity.get());
                     orderRepo.save(orderEntity.get());
+                    return shippingEntity.getOrderCode()+ " IS ACCEPTED";
                 }
-                return packingEntity.get().getOrderCode() + " IS ACCEPTED";
+                return packingEntity.get().getOrderCode()+"IS NOT COMPLETED PACKING";
             }
             return orderEntity.get().getOrderCode() + " IS NOT IN PACKING DEPARTMENT";
         }
@@ -111,8 +117,9 @@ public class FulfilmentService {
                         orderEntity.get().setOrderStatus("DELIVERED");
                         orderRepo.save(orderEntity.get());
                         shippingRepo.save(shippingEntity.get());
+                        return shippingEntity.get().getOrderCode()+" IS UPDATED";
                     }
-                    return shippingEntity.get().getOrderCode()+" IS UPDATED";
+                    return shippingEntity.get().getOrderCode()+" IS NOT SHIPPED";
                 }
                 return packingEntity.get().getOrderCode()+"IS NOT EXISTS IN SHIPPING DEPT";
             }
