@@ -1,0 +1,140 @@
+package com.cjss.eCommerce1.service;
+
+import com.cjss.eCommerce1.entity.*;
+import com.cjss.eCommerce1.model.OrderModel;
+import com.cjss.eCommerce1.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class FulfilmentService {
+    @Autowired
+    private ShippingRepo shippingRepo;
+    @Autowired
+    private OrderRepo orderRepo;
+    @Autowired
+    private CartRepo cartRepo;
+    @Autowired
+    private ProductRepo productRepo;
+    @Autowired
+    private SKURepo skuRepo;
+    @Autowired
+    private PriceRepo priceRepo;
+    @Autowired
+    private InventoryRepo inventoryRepo;
+    @Autowired
+    private PackingRepo packingRepo;
+
+    public String placeOrder(String skuCode, Integer quantity) {
+        Optional<SKUEntity> skuEntity = skuRepo.findById(skuCode);
+        if (skuEntity.isPresent()) {
+            InventoryEntity inventoryEntity = inventoryRepo.getById(skuCode);
+            if (inventoryEntity.getQuantity() >= quantity) {
+                OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVED", skuEntity.get());
+                inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
+                // when we ordered from cart the element will delete from cart
+               Optional <CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
+                if (a.isPresent()){cartRepo.deleteById(a.get().getCartCode());}
+                inventoryRepo.save(inventoryEntity);
+                orderRepo.save(orderEntity);
+                return "YOUR ORDER " + orderEntity.getOrderCode() + " IS PLACED SUCCESSFULLY";
+            }
+            return "OUT OF STOCK";
+        }
+        return "SKU CODE NOT EXISTS";
+    }
+
+    public String acceptToPacking(String orderCode) {
+        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
+        if (orderEntity.isPresent()) {
+            PackingEntity packingEntity = new PackingEntity(orderEntity.get().getOrderCode(), "Accepted");
+            packingRepo.save(packingEntity);
+            orderEntity.get().setOrderStatus("PROCESSING");
+            orderRepo.saveAndFlush(orderEntity.get());
+            return orderEntity.get().getOrderCode() + " IS ACCEPTED";
+        }
+        return orderCode + " IS NOT EXISTS";
+
+    }
+
+    public String updatePacking(String status, String orderCode) {
+        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
+        if (orderEntity.isPresent()) {
+            Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
+            if (packingEntity.isPresent()) {
+                packingEntity.get().setStatus(status);
+                packingRepo.save(packingEntity.get());
+                if (packingEntity.get().getStatus().equalsIgnoreCase("PACKING")) {
+                    orderEntity.get().setOrderStatus("PACKING");
+                    orderRepo.save(orderEntity.get());
+                }
+                return "STATUS UPDATED";
+            }
+            return orderEntity.get().getOrderCode() + " IS NOT EXISTS IN PACKING DEPARTMENT";
+        }
+        return orderCode + " IS NOT EXISTS";
+    }
+
+    public String acceptToShipping(String orderCode) {
+        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
+        if (orderEntity.isPresent()) {
+            Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
+            if (packingEntity.isPresent()) {
+                ShippingEntity shippingEntity = new ShippingEntity(packingEntity.get().getOrderCode(), "Accepted");
+                shippingRepo.save(shippingEntity);
+                packingEntity.get().setStatus("Completed");
+                packingRepo.save(packingEntity.get());
+                if (packingEntity.get().getStatus().equalsIgnoreCase("Completed") && shippingEntity.getStatus().equalsIgnoreCase("Accepted")) {
+                    orderEntity.get().setOrderStatus("SHIPPING");
+                    orderRepo.save(orderEntity.get());
+                }
+                return packingEntity.get().getOrderCode() + " IS ACCEPTED";
+            }
+            return orderEntity.get().getOrderCode() + " IS NOT IN PACKING DEPARTMENT";
+        }
+        return orderCode + " IS NOT EXISTS";
+    }
+
+    public String updateShipping(String status, String orderCode) {
+        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
+        if (orderEntity.isPresent()) {
+            Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
+            if (packingEntity.isPresent()) {
+                Optional<ShippingEntity> shippingEntity = shippingRepo.findById(packingEntity.get().getOrderCode());
+                if (shippingEntity.isPresent()){
+                    shippingEntity.get().setStatus(status);
+                    shippingRepo.save(shippingEntity.get());
+                    if (shippingEntity.get().getStatus().equalsIgnoreCase("DELIVERED")){
+                        orderEntity.get().setOrderStatus("DELIVERED");
+                    orderRepo.save(orderEntity.get());
+                    }
+                    return shippingEntity.get().getOrderCode()+" IS UPDATED";
+                }
+                return packingEntity.get().getOrderCode()+"IS NOT EXISTS IN SHIPPING DEPT";
+            }
+            return orderEntity.get().getOrderCode()+" IS NOT EXISTS IN PACKING DEPT";
+        }
+        return orderCode+" IS NOT EXISTS";
+
+    }
+
+    public OrderModel getOrder(String orderCode) {
+        Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
+        if (orderEntity.isPresent())
+        {
+            Optional<PriceEntity> priceEntity = priceRepo.findById(orderEntity.get().getSkuEntity().getSkuCode());
+            Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(orderEntity.get().getSkuEntity().getSkuCode());
+            return new OrderModel(orderEntity.get().getOrderCode(),
+                    orderEntity.get().getSkuEntity().getProductEntity().getProductName(),
+                    orderEntity.get().getSkuEntity().getSkuCode(),
+                    orderEntity.get().getSkuEntity().getSkuSize(),
+                    orderEntity.get().getQuantity(),
+                    priceEntity.get().getPrice()*orderEntity.get().getQuantity(),
+                    orderEntity.get().getOrderStatus()
+                    );
+        }
+        return  null;
+    }
+}
