@@ -69,17 +69,17 @@ public class ProductService {
         String report = "";
        if (skuEntity.isPresent() && inventoryEntity.isPresent() && priceEntity.isPresent()){
            if (skuModel.getSkuSize() != null){skuEntity.get().setSkuSize(skuModel.getSkuSize());
-               report += skuModel.getSkuCode()+" UPDATED : "+skuModel.getSkuSize();
+               report += skuModel.getSkuCode()+" UPDATED  SIZE : "+skuModel.getSkuSize()+"\n";
            }
            if (skuModel.getProductCode() != null){
                skuEntity.get().setProductEntity(productRepo.findById(skuModel.getProductCode()).get());
-               report += skuModel.getSkuCode()+" UPDATED : "+skuModel.getProductCode();
+               report += skuModel.getSkuCode()+" UPDATED PRODUCT CODE : "+skuModel.getProductCode()+"\n";
            }
            if (skuModel.getAvailableQuantity() != 0){inventoryEntity.get().setQuantity(skuModel.getAvailableQuantity());
-               report += skuModel.getSkuCode()+" TOTAL QUANTITY : "+skuModel.getAvailableQuantity();
+               report += skuModel.getSkuCode()+" TOTAL QUANTITY : "+skuModel.getAvailableQuantity()+"\n";
            }
            if (skuModel.getSkuPrice() != 0){priceEntity.get().setPrice(skuModel.getSkuPrice());
-               report += skuModel.getSkuCode()+" PRICE : "+skuModel.getSkuPrice();
+               report += skuModel.getSkuCode()+" PRICE : "+skuModel.getSkuPrice()+"\n";
            }
            skuRepo.save(skuEntity.get());
            inventoryRepo.save(inventoryEntity.get());
