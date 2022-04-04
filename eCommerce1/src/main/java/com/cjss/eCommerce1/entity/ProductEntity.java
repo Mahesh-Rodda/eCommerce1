@@ -1,18 +1,21 @@
 package com.cjss.eCommerce1.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-
+@Validated
 @Entity
 @Table(name = "PRODUCTS")
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "native")
     @Column(name = "PRODUCT_CODE")
-    private String productCode;
+    private Integer productCode;
     @Column(name = "PRODUCT_NAME")
+    @NotNull
     private String productName;
     @Column(name = "DESCRIPTION")
     private String description;
@@ -23,17 +26,17 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
-    public ProductEntity(String productId, String productName, String description) {
+    public ProductEntity(Integer productId, String productName, String description) {
         this.productCode = productId;
         this.productName = productName;
         this.description = description;
     }
 
-    public String getProductCode() {
+    public Integer getProductCode() {
         return productCode;
     }
 
-    public void setProductCode(String productCode) {
+    public void setProductCode(Integer productCode) {
         this.productCode = productCode;
     }
 

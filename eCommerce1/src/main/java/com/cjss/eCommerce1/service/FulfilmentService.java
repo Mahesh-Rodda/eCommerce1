@@ -33,7 +33,7 @@ public class FulfilmentService {
         if (skuEntity.isPresent()) {
             InventoryEntity inventoryEntity = inventoryRepo.getById(skuCode);
             if (inventoryEntity.getQuantity() >= quantity) {
-                OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVED", skuEntity.get());
+                OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVEDu", skuEntity.get());
                 inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
                 // when we ordered from cart the element will delete from cart
                List<CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
@@ -57,7 +57,7 @@ public class FulfilmentService {
             packingRepo.save(packingEntity);
             return orderEntity.get().getOrderCode() + " IS ACCEPTED";
             }
-            return orderEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
+            return "ERROR : \n ORDER CODE : "+orderEntity.get().getOrderCode()+"\n ORDER STATUS : "+orderEntity.get().getOrderStatus();
         }
         return orderCode + " IS NOT EXISTS";
 
@@ -80,7 +80,7 @@ public class FulfilmentService {
                     packingRepo.save(packingEntity.get());
                     return "STATUS UPDATED AS COMPLETED";
                 }
-                return orderEntity.get().getOrderCode()+" IS NOT ACCEPTED BY PACKING DEPT...";
+                return "ERROR : \n ORDER CODE : "+orderEntity.get().getOrderCode()+"\n ORDER STATUS : "+orderEntity.get().getOrderStatus()+"\n PACKING STATUS : "+packingEntity.get().getStatus();
             }
             return orderEntity.get().getOrderCode() + " IS NOT EXISTS IN PACKING DEPARTMENT";
         }
@@ -99,7 +99,7 @@ public class FulfilmentService {
                     orderRepo.save(orderEntity.get());
                     return shippingEntity.getOrderCode()+ " IS ACCEPTED";
                 }
-                return packingEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
+                return "ERROR : \n ORDER CODE : "+packingEntity.get().getOrderCode()+"\n ORDER STATUS : "+packingEntity.get().getStatus();
             }
             return orderEntity.get().getOrderCode() + " IS NOT IN PACKING DEPARTMENT";
         }
@@ -120,7 +120,7 @@ public class FulfilmentService {
                         shippingRepo.save(shippingEntity.get());
                         return shippingEntity.get().getOrderCode()+" IS UPDATED";
                     }
-                    return shippingEntity.get().getOrderCode()+"\n"+orderEntity.get().getOrderStatus();
+                    return "ERROR : \n ORDER CODE : "+shippingEntity.get().getOrderCode()+"\n ORDER STATUS : "+orderEntity.get().getOrderStatus();
                 }
                 return packingEntity.get().getOrderCode()+"IS NOT EXISTS IN SHIPPING DEPT";
             }

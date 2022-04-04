@@ -1,6 +1,7 @@
 package com.cjss.eCommerce1.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 @Table(name = "SKU")
 public class SKUEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "native")
     @Column(name = "SKU_CODE")
     private String skuCode;
     @Column(name = "SKU_SIZE")
@@ -18,11 +19,11 @@ public class SKUEntity {
     @JsonIgnore
     @JoinColumn(name = "PRODUCT_COE")
     private ProductEntity productEntity;
-    @JsonIgnore
-    @OneToMany(mappedBy = "skuEntity")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "skuEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<CartEntity> cartEntity;
     @JsonIgnore
-    @OneToMany(mappedBy = "skuEntity")
+    @OneToMany(mappedBy = "skuEntity", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<OrderEntity> orderEntities;
 
     public SKUEntity() {

@@ -4,7 +4,7 @@ public class SKUModel {
     private  String skuCode;
     private String skuSize;
     private double skuPrice;
-    private String productCode;
+    private Integer productCode;
     private Integer availableQuantity;
 
     public SKUModel(String skuCode, String skuSize,double skuPrice,Integer quantity) {
@@ -46,11 +46,11 @@ public class SKUModel {
         this.skuSize = skuSize;
     }
 
-    public String getProductCode() {
+    public Integer getProductCode() {
         return productCode;
     }
 
-    public void setProductCode(String productCode) {
+    public void setProductCode(Integer productCode) {
         this.productCode = productCode;
     }
 

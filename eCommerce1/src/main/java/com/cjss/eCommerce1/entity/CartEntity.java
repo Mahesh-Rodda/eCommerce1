@@ -8,8 +8,10 @@ public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String cartCode;
+    @Column(name = "quantity")
     private Integer quantity;
-    @ManyToOne(cascade = CascadeType.DETACH)
+
+    @ManyToOne(cascade = CascadeType.ALL)
     private SKUEntity skuEntity;
 
     public CartEntity() {

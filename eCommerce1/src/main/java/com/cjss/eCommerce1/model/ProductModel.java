@@ -1,15 +1,18 @@
 package com.cjss.eCommerce1.model;
 
+import javax.validation.constraints.NotNull;
+
 public class ProductModel {
-    private String productCode;
+    private Integer productCode;
+    @NotNull
     private String productName;
     private String description;
 
-    public String getProductCode() {
+    public Integer getProductCode() {
         return productCode;
     }
 
-    public void setProductCode(String productCode) {
+    public void setProductCode(Integer productCode) {
         this.productCode = productCode;
     }
 

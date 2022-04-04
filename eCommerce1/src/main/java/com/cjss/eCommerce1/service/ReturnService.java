@@ -41,20 +41,20 @@ public class ReturnService {
                 returnRepo.save(returnEntity);
                 return returnEntity.getOrderCode()+" IS INITIATED FOR RETURN";
             }
-            return  " Wait until the order delivery "+orderEntity.get().getOrderCode();
+            return  "ERROR : \n ORDER CODE : "+orderEntity.get().getOrderCode()+"\n ORDER STATUS : "+orderEntity.get().getOrderStatus();
         }
         else if (orderEntity.get().getOrderStatus().equalsIgnoreCase("RETURN INITIATED") || orderEntity.get().getOrderStatus().equalsIgnoreCase("RETURN ACCEPTED"))
         {
             Optional<ReturnEntity> returnEntity = returnRepo.findById(orderCode);
-            if (returnEntity.isPresent() && status.equalsIgnoreCase("ACCEPT"))
+            if (returnEntity.isPresent() && status.equalsIgnoreCase("ACCEPT") && orderEntity.get().getOrderStatus().equalsIgnoreCase("RETURN INITIATED"))
         {
             returnEntity.get().setStatus(status);
             orderEntity.get().setOrderStatus("RETURN ACCEPTED");
             orderRepo.save(orderEntity.get());
             returnRepo.save(returnEntity.get());
-            return  returnEntity.get().getOrderCode()+" IS ACCEPTED";
+            return  returnEntity.get().getOrderCode()+" IS ACCEPTED FOR RETURN";
         }
-            else if (returnEntity.isPresent() && status.equalsIgnoreCase("RETURNED")){
+            else if (returnEntity.isPresent() && status.equalsIgnoreCase("RETURNED") && orderEntity.get().getOrderStatus().equalsIgnoreCase("RETURN ACCEPTED")){
                 returnEntity.get().setStatus(status);
                 orderEntity.get().setOrderStatus("RETURNED");
                 InventoryEntity inventoryEntity = inventoryRepo.getById(orderEntity.get().getSkuEntity().getSkuCode());
@@ -62,7 +62,7 @@ public class ReturnService {
                 inventoryRepo.save(inventoryEntity);
                 return "RETURNED";
             }
-        return orderCode+" IS NOT RETURN INITIATED";
+        return "ERROR : \n ORDER CODE : "+orderEntity.get().getOrderCode()+"\n ORDER STATUS : "+orderEntity.get().getOrderStatus();
     }
         return orderCode+" IS NOT EXISTS";
     }

@@ -6,6 +6,8 @@ import com.cjss.eCommerce1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -13,7 +15,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/add")
-    public String addProduct(@RequestBody ProductModel productModel){return productService.addProduct(productModel);}
+    public String addProduct(@Valid @RequestBody ProductModel productModel){return productService.addProduct(productModel);}
     @PostMapping("/add/sku")
     public String addSku(@RequestBody SKUModel skuModel){return productService.addProductSKU(skuModel);}
     @PutMapping("/update")
