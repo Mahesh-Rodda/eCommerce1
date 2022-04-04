@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ShippingRepo extends JpaRepository<ShippingEntity,String> {
+public interface ShippingRepo extends JpaRepository<ShippingEntity,Integer> {
 }

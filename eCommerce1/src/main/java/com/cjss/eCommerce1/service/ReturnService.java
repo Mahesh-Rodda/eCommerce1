@@ -30,7 +30,7 @@ public class ReturnService {
     @Autowired
     private ReturnRepo returnRepo;
 
-    public String updateReturn(String orderCode, String status){
+    public String updateReturn(Integer orderCode, String status){
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent() && status.equalsIgnoreCase("RETURN")){
             if(orderEntity.get().getOrderStatus().equalsIgnoreCase("DELIVERED"))

@@ -57,6 +57,7 @@ public class ProductService {
           if(productModel.getDescription() != null){productEntity.get().setDescription(productModel.getDescription());
               result = productModel.getProductCode()+" UPDATED : "+productModel.getDescription();
           }
+          productRepo.save(productEntity.get());
        }
        result = productModel.getProductCode()+"NOT EXISTS";
        return result;
@@ -65,23 +66,27 @@ public class ProductService {
        Optional<SKUEntity> skuEntity = skuRepo.findById(skuModel.getSkuCode());
        Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(skuModel.getSkuCode());
         Optional<PriceEntity> priceEntity = priceRepo.findById(skuModel.getSkuCode());
-        String report = null;
+        String report = "";
        if (skuEntity.isPresent() && inventoryEntity.isPresent() && priceEntity.isPresent()){
            if (skuModel.getSkuSize() != null){skuEntity.get().setSkuSize(skuModel.getSkuSize());
-               report = skuModel.getSkuCode()+" UPDATED : "+skuModel.getSkuSize();
+               report += skuModel.getSkuCode()+" UPDATED : "+skuModel.getSkuSize();
            }
            if (skuModel.getProductCode() != null){
                skuEntity.get().setProductEntity(productRepo.findById(skuModel.getProductCode()).get());
-               report = skuModel.getSkuCode()+" UPDATED : "+skuModel.getProductCode();
+               report += skuModel.getSkuCode()+" UPDATED : "+skuModel.getProductCode();
            }
            if (skuModel.getAvailableQuantity() != 0){inventoryEntity.get().setQuantity(skuModel.getAvailableQuantity());
-               report = skuModel.getSkuCode()+" TOTAL QUANTITY : "+skuModel.getAvailableQuantity();
+               report += skuModel.getSkuCode()+" TOTAL QUANTITY : "+skuModel.getAvailableQuantity();
            }
            if (skuModel.getSkuPrice() != 0){priceEntity.get().setPrice(skuModel.getSkuPrice());
-               report = skuModel.getSkuCode()+" PRICE : "+skuModel.getSkuPrice();
+               report += skuModel.getSkuCode()+" PRICE : "+skuModel.getSkuPrice();
            }
+           skuRepo.save(skuEntity.get());
+           inventoryRepo.save(inventoryEntity.get());
+           priceRepo.save(priceEntity.get());
        }
-    report = skuModel.getSkuCode()+" NOT EXISTS";
+       else
+       {    report = skuModel.getSkuCode()+" NOT EXISTS"; }
        return report;
     }
 //    public String deleteSku

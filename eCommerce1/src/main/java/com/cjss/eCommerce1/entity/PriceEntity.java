@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class PriceEntity {
     @Id
     @Column(name = "SKU_CODE")
-    private String skuCode;
+    private Integer skuCode;
     @Column(name = "SKU_PRICE")
     private double price;
 
@@ -15,16 +15,16 @@ public class PriceEntity {
     public PriceEntity() {
     }
 
-    public PriceEntity(String skuCode, double price) {
+    public PriceEntity(Integer skuCode, double price) {
         this.skuCode = skuCode;
         this.price = price;
     }
 
-    public String getSkuCode() {
+    public Integer getSkuCode() {
         return skuCode;
     }
 
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(Integer skuCode) {
         this.skuCode = skuCode;
     }
 

@@ -14,7 +14,7 @@ public class OrderController {
     private FulfilmentService fulfilmentService;
 
     @PostMapping("/place")
-    public String placeOrder(@Valid @RequestParam String skuCode, @RequestParam Integer quantity) { return fulfilmentService.placeOrder(skuCode, quantity);}
+    public String placeOrder(@Valid @RequestParam Integer skuCode, @RequestParam Integer quantity) { return fulfilmentService.placeOrder(skuCode, quantity);}
     @GetMapping("/track")
-    public OrderModel getOrder(@RequestParam String orderCode){ return  fulfilmentService.getOrder(orderCode);}
+    public OrderModel getOrder(@RequestParam Integer orderCode){ return  fulfilmentService.getOrder(orderCode);}
 }

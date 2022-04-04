@@ -3,15 +3,14 @@ package com.cjss.eCommerce1.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CART")
+@Table(name = "PRODUCT_CRT")
 public class CartEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String cartCode;
+    private Integer cartCode;
     @Column(name = "quantity")
     private Integer quantity;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private SKUEntity skuEntity;
 
     public CartEntity() {
@@ -22,11 +21,11 @@ public class CartEntity {
         this.skuEntity = skuEntity;
     }
 
-    public String getCartCode() {
+    public Integer getCartCode() {
         return cartCode;
     }
 
-    public void setCartCode(String cartCode) {
+    public void setCartCode(Integer cartCode) {
         this.cartCode = cartCode;
     }
 

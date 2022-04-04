@@ -28,12 +28,12 @@ public class FulfilmentService {
     @Autowired
     private PackingRepo packingRepo;
 
-    public String placeOrder(String skuCode, Integer quantity) {
+    public String placeOrder(Integer skuCode, Integer quantity) {
         Optional<SKUEntity> skuEntity = skuRepo.findById(skuCode);
         if (skuEntity.isPresent()) {
             InventoryEntity inventoryEntity = inventoryRepo.getById(skuCode);
             if (inventoryEntity.getQuantity() >= quantity) {
-                OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVEDu", skuEntity.get());
+                OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVED", skuEntity.get());
                 inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
                 // when we ordered from cart the element will delete from cart
                List<CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
@@ -47,7 +47,7 @@ public class FulfilmentService {
         return "SKU CODE NOT EXISTS";
     }
 
-    public String acceptToPacking(String orderCode) {
+    public String acceptToPacking(Integer orderCode) {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent()) {
             PackingEntity packingEntity = new PackingEntity(orderEntity.get().getOrderCode(), "Accepted");
@@ -63,7 +63,7 @@ public class FulfilmentService {
 
     }
 
-    public String updatePacking(String status, String orderCode) {
+    public String updatePacking(String status, Integer orderCode) {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent()) {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
@@ -87,7 +87,7 @@ public class FulfilmentService {
         return orderCode + " IS NOT EXISTS";
     }
 
-    public String acceptToShipping(String orderCode) {
+    public String acceptToShipping(Integer orderCode) {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent()) {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
@@ -106,7 +106,7 @@ public class FulfilmentService {
         return orderCode + " IS NOT EXISTS";
     }
 
-    public String updateShipping(String status, String orderCode) {
+    public String updateShipping(String status, Integer orderCode) {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent()) {
             Optional<PackingEntity> packingEntity = packingRepo.findById(orderEntity.get().getOrderCode());
@@ -130,7 +130,7 @@ public class FulfilmentService {
 
     }
 
-    public OrderModel getOrder(String orderCode) {
+    public OrderModel getOrder(Integer orderCode) {
         Optional<OrderEntity> orderEntity = orderRepo.findById(orderCode);
         if (orderEntity.isPresent())
         {

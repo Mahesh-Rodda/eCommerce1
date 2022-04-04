@@ -11,9 +11,9 @@ public class ShippingController {
     private FulfilmentService fulfilmentService;
 
     @PostMapping("/accept")
-    public String acceptToShipping(@RequestParam String orderCode) { return  fulfilmentService.acceptToShipping(orderCode);}
+    public String acceptToShipping(@RequestParam Integer orderCode) { return  fulfilmentService.acceptToShipping(orderCode);}
     @PutMapping("/update/{status}")
-    public String updateShipping(@PathVariable String status,@RequestParam String orderCode) { return fulfilmentService.updateShipping(status, orderCode);}
+    public String updateShipping(@PathVariable String status,@RequestParam Integer orderCode) { return fulfilmentService.updateShipping(status, orderCode);}
 
 
     }

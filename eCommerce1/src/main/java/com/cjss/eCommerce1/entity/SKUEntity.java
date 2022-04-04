@@ -1,45 +1,39 @@
 package com.cjss.eCommerce1.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "SKU")
+@Table(name = "PRODUCT_SKU")
 public class SKUEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "native")
     @Column(name = "SKU_CODE")
-    private String skuCode;
+    private Integer skuCode;
     @Column(name = "SKU_SIZE")
     private String skuSize;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinColumn(name = "PRODUCT_COE")
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "PRODUCT_CODE")
     private ProductEntity productEntity;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "skuEntity", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skuEntity",cascade = CascadeType.DETACH)
     private List<CartEntity> cartEntity;
-    @JsonIgnore
-    @OneToMany(mappedBy = "skuEntity", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "skuEntity", cascade = CascadeType.DETACH)
     private List<OrderEntity> orderEntities;
 
     public SKUEntity() {
     }
 
-    public SKUEntity(String skuCode, String size, ProductEntity productEntity) {
+    public SKUEntity(Integer skuCode, String size, ProductEntity productEntity) {
         this.skuCode = skuCode;
         this.skuSize = size;
         this.productEntity = productEntity;
     }
 
-    public String getSkuCode() {
+    public Integer getSkuCode() {
         return skuCode;
     }
 
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(Integer skuCode) {
         this.skuCode = skuCode;
     }
 

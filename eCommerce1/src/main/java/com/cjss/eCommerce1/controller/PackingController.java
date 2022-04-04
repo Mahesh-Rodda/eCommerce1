@@ -10,9 +10,9 @@ public class PackingController {
     @Autowired
     private FulfilmentService fulfilmentService;
     @PostMapping("/accept")
-    public String acceptToPacking(@RequestParam String orderCode) { return fulfilmentService.acceptToPacking(orderCode); }
+    public String acceptToPacking(@RequestParam Integer orderCode) { return fulfilmentService.acceptToPacking(orderCode); }
     @PutMapping("/update/{status}/{orderCode}")
-    public String updatePacking(@PathVariable String status,@PathVariable String orderCode) { return  fulfilmentService.updatePacking(status, orderCode);}
+    public String updatePacking(@PathVariable String status,@PathVariable Integer orderCode) { return  fulfilmentService.updatePacking(status, orderCode);}
 
 
     }

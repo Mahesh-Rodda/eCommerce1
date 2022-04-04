@@ -1,13 +1,13 @@
 package com.cjss.eCommerce1.model;
 
 public class SKUModel {
-    private  String skuCode;
+    private Integer skuCode;
     private String skuSize;
     private double skuPrice;
     private Integer productCode;
     private Integer availableQuantity;
 
-    public SKUModel(String skuCode, String skuSize,double skuPrice,Integer quantity) {
+    public SKUModel(Integer skuCode, String skuSize, double skuPrice, Integer quantity) {
         this.skuCode = skuCode;
         this.skuSize = skuSize;
         this.skuPrice = skuPrice;
@@ -30,11 +30,11 @@ public class SKUModel {
         this.skuPrice = skuPrice;
     }
 
-    public String getSkuCode() {
+    public Integer getSkuCode() {
         return skuCode;
     }
 
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(Integer skuCode) {
         this.skuCode = skuCode;
     }
 

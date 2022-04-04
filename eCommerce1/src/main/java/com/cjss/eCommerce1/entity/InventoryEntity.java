@@ -8,23 +8,23 @@ import javax.persistence.Table;
 @Table(name = "INVENTORY")
 public class InventoryEntity {
     @Id
-    private String skuCode;
+    private Integer skuCode;
     private Integer quantity;
 
     public InventoryEntity() {
 
     }
 
-    public InventoryEntity(String skuCode, Integer quantity) {
+    public InventoryEntity(Integer skuCode, Integer quantity) {
         this.skuCode = skuCode;
         this.quantity = quantity;
     }
 
-    public String getSkuCode() {
+    public Integer getSkuCode() {
         return skuCode;
     }
 
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(Integer skuCode) {
         this.skuCode = skuCode;
     }
 

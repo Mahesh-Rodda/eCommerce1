@@ -1,6 +1,5 @@
 package com.cjss.eCommerce1.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
@@ -8,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 @Validated
 @Entity
-@Table(name = "PRODUCTS")
+@Table(name = "PRODUCTS_TABLE")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "native")
@@ -19,8 +18,7 @@ public class ProductEntity {
     private String productName;
     @Column(name = "DESCRIPTION")
     private String description;
-    @JsonIgnore
-    @OneToMany(mappedBy = "productEntity")
+    @OneToMany(mappedBy = "productEntity",cascade = CascadeType.DETACH)
     private List<SKUEntity> skuEntities;
 
     public ProductEntity() {

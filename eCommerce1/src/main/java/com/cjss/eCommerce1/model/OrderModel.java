@@ -1,15 +1,15 @@
 package com.cjss.eCommerce1.model;
 
 public class OrderModel {
-    private String orderCode;
+    private Integer orderCode;
     private String productName;
-    private String skuCode;
+    private Integer skuCode;
     private String skuSize;
     private Integer quantity;
     private double price;
     private String orderStatus;
 
-    public OrderModel(String orderCode, String productName, String skuCode, String skuSize, Integer quantity, double price, String orderStatus) {
+    public OrderModel(Integer orderCode, String productName, Integer skuCode, String skuSize, Integer quantity, double price, String orderStatus) {
         this.orderCode = orderCode;
         this.productName = productName;
         this.skuCode = skuCode;
@@ -19,11 +19,11 @@ public class OrderModel {
         this.orderStatus = orderStatus;
     }
 
-    public String getOrderCode() {
+    public Integer getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
+    public void setOrderCode(Integer orderCode) {
         this.orderCode = orderCode;
     }
 
@@ -35,11 +35,11 @@ public class OrderModel {
         this.productName = productName;
     }
 
-    public String getSkuCode() {
+    public Integer getSkuCode() {
         return skuCode;
     }
 
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(Integer skuCode) {
         this.skuCode = skuCode;
     }
 

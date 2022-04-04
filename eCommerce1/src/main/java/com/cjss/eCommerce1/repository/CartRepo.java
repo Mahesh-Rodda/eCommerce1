@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CartRepo extends JpaRepository<CartEntity,String> {
+public interface CartRepo extends JpaRepository<CartEntity, Integer> {
     List<CartEntity> findByQuantityAndSkuEntity(Integer quantity, SKUEntity skuEntity);
 }

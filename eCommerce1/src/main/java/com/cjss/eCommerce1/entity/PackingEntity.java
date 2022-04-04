@@ -6,21 +6,21 @@ import javax.persistence.*;
 @Table(name = "PACKING_DEPT")
 public class PackingEntity {
     @Id
-    private String orderCode;
+    private Integer orderCode;
     private String status;
     public PackingEntity() {
     }
 
-    public PackingEntity(String orderCode, String status) {
+    public PackingEntity(Integer orderCode, String status) {
         this.orderCode = orderCode;
         this.status = status;
     }
 
-    public String getOrderCode() {
+    public Integer getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
+    public void setOrderCode(Integer orderCode) {
         this.orderCode = orderCode;
     }
 

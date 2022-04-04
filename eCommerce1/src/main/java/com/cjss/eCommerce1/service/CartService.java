@@ -27,7 +27,7 @@ public class CartService {
     private InventoryRepo inventoryRepo;
 
 
-    public String addCart(String skuCode,Integer quantity){
+    public String addCart(Integer skuCode,Integer quantity){
         Optional<SKUEntity> skuEntity =skuRepo.findById(skuCode);
         if (skuEntity.isPresent()){
            InventoryEntity inventoryEntity = inventoryRepo.findById(skuCode).get();

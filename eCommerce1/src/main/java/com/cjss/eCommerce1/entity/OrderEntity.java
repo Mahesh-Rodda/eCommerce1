@@ -1,23 +1,15 @@
 package com.cjss.eCommerce1.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.validation.annotation.Validated;
-
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "ORDERS")
-@Validated
+@Table(name = "TABLE_ORD")
 public class OrderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "native")
-    @Column(name = "order_code")
-    private String orderCode;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer orderCode;
     private Integer quantity;
-    @Pattern(regexp = "^(RECEIVED|PROCESSING|PACKING|SHIPPING|DELIVERED|RETURNED|RETURN INITIATED|RETURN ACCEPTED)$",message = "Invalid input")
     private String orderStatus;
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private SKUEntity skuEntity;
 
@@ -30,11 +22,11 @@ public class OrderEntity {
         this.skuEntity = skuEntity;
     }
 
-    public String getOrderCode() {
+    public Integer getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
+    public void setOrderCode(Integer orderCode) {
         this.orderCode = orderCode;
     }
 

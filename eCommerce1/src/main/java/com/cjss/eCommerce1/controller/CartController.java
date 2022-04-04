@@ -14,7 +14,7 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/add")
-    public String addCart(@RequestParam String skuCode,@RequestParam Integer quantity){ return cartService.addCart(skuCode, quantity);}
+    public String addCart(@RequestParam Integer skuCode,@RequestParam Integer quantity){ return cartService.addCart(skuCode, quantity);}
     @GetMapping("/view")
     public List<CartModel> getCart(){ return  cartService.getCartModel();}
 

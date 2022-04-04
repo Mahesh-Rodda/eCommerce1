@@ -1,7 +1,7 @@
 package com.cjss.eCommerce1.model;
 
 public class CartModel {
-    private String cartCode;
+    private Integer cartCode;
     private String productName;
     private String size;
     private double itemPrice;
@@ -10,7 +10,7 @@ public class CartModel {
     private Integer availableQuantity;
     private double totalPrice;
 
-    public CartModel(String cartCode, String productName, String size, double itemPrice,double price, Integer quantity, Integer availableQuantity, double totalPrice) {
+    public CartModel(Integer cartCode, String productName, String size, double itemPrice, double price, Integer quantity, Integer availableQuantity, double totalPrice) {
         this.cartCode = cartCode;
         this.productName = productName;
         this.size = size;
@@ -21,11 +21,11 @@ public class CartModel {
         this.totalPrice = totalPrice;
     }
 
-    public String getCartCode() {
+    public Integer getCartCode() {
         return cartCode;
     }
 
-    public void setCartCode(String cartCode) {
+    public void setCartCode(Integer cartCode) {
         this.cartCode = cartCode;
     }
 

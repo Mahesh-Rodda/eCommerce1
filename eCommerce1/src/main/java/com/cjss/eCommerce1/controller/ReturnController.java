@@ -10,9 +10,9 @@ public class ReturnController {
     @Autowired
     private ReturnService returnService;
     @PostMapping("/{status}")
-    public String initReturn(@RequestParam String orderCode, @PathVariable String status){ return returnService.updateReturn(orderCode, status);}
+    public String initReturn(@RequestParam Integer orderCode, @PathVariable String status){ return returnService.updateReturn(orderCode, status);}
     @PutMapping("/{status}")
-    public String updateReturn(@RequestParam String orderCode, @PathVariable String status){ return returnService.updateReturn(orderCode, status);}
+    public String updateReturn(@RequestParam Integer orderCode, @PathVariable String status){ return returnService.updateReturn(orderCode, status);}
 
 
 }

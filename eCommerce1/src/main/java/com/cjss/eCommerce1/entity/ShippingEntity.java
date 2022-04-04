@@ -1,29 +1,27 @@
 package com.cjss.eCommerce1.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "SHIPPING_DEPT")
 public class ShippingEntity {
     @Id
-    private String orderCode;
+    private Integer orderCode;
     private String status;
 
     public ShippingEntity() {
     }
 
-    public ShippingEntity(String orderCode, String status) {
+    public ShippingEntity(Integer orderCode, String status) {
         this.orderCode = orderCode;
         this.status = status;
     }
 
-    public String getOrderCode() {
+    public Integer getOrderCode() {
         return orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
+    public void setOrderCode(Integer orderCode) {
         this.orderCode = orderCode;
     }
 
