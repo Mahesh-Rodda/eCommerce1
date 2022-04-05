@@ -1,10 +1,18 @@
 package com.cjss.eCommerce1.model;
 
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+@Validated
 public class SKUModel {
     private Integer skuCode;
+    @Pattern(regexp = "^(XS|S|M|L|XL|XXL|XXXL)$" , message = "It should be like : XS/S/M/L/XL/XXL/XXXL")
     private String skuSize;
+    @Min(value = 0)
     private double skuPrice;
     private Integer productCode;
+    @Min(value = 0)
     private Integer availableQuantity;
 
     public SKUModel(Integer skuCode, String skuSize, double skuPrice, Integer quantity) {

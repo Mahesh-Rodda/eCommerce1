@@ -49,17 +49,18 @@ public class ProductService {
     }
     public String updateProduct(ProductModel productModel){
        Optional<ProductEntity> productEntity = productRepo.findById(productModel.getProductCode());
-       String result = null;
+       String result = "";
        if(productEntity.isPresent()){
            if(productModel.getProductName() != null){productEntity.get().setProductName(productModel.getProductName());
-               result = productModel.getProductCode()+" UPDATED : "+productModel.getProductName();
+               result += productModel.getProductCode()+" UPDATED NAME : "+productModel.getProductName()+"\n";
            }
           if(productModel.getDescription() != null){productEntity.get().setDescription(productModel.getDescription());
-              result = productModel.getProductCode()+" UPDATED : "+productModel.getDescription();
+              result += productModel.getProductCode()+" UPDATED DESCRIPTION : "+productModel.getDescription();
           }
           productRepo.save(productEntity.get());
        }
-       result = productModel.getProductCode()+"NOT EXISTS";
+       else {
+       result = productModel.getProductCode()+"NOT EXISTS";}
        return result;
     }
     public String updateSKU(SKUModel skuModel){
@@ -75,7 +76,7 @@ public class ProductService {
                skuEntity.get().setProductEntity(productRepo.findById(skuModel.getProductCode()).get());
                report += skuModel.getSkuCode()+" UPDATED PRODUCT CODE : "+skuModel.getProductCode()+"\n";
            }
-           if (skuModel.getAvailableQuantity() != 0){inventoryEntity.get().setQuantity(skuModel.getAvailableQuantity());
+           if (skuModel.getAvailableQuantity() != null){inventoryEntity.get().setQuantity(skuModel.getAvailableQuantity());
                report += skuModel.getSkuCode()+" TOTAL QUANTITY : "+skuModel.getAvailableQuantity()+"\n";
            }
            if (skuModel.getSkuPrice() != 0){priceEntity.get().setPrice(skuModel.getSkuPrice());

@@ -17,9 +17,9 @@ public class ProductController {
     @PostMapping("/add")
     public String addProduct(@Valid @RequestBody ProductModel productModel){return productService.addProduct(productModel);}
     @PostMapping("/add/sku")
-    public String addSku(@RequestBody SKUModel skuModel){return productService.addProductSKU(skuModel);}
+    public String addSku(@Valid @RequestBody SKUModel skuModel){return productService.addProductSKU(skuModel);}
     @PutMapping("/update")
-    public String updateProduct(@RequestBody ProductModel productModel){ return  productService.updateProduct(productModel);}
+    public String updateProduct(@Valid @RequestBody ProductModel productModel){ return  productService.updateProduct(productModel);}
     @PutMapping("/update/sku")
-    public String updateSku(@RequestBody SKUModel skuModel){ return  productService.updateSKU(skuModel);}
+    public String updateSku(@Valid @RequestBody SKUModel skuModel){ return  productService.updateSKU(skuModel);}
 }

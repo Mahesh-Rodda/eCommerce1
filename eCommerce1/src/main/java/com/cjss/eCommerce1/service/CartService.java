@@ -30,8 +30,8 @@ public class CartService {
     public String addCart(Integer skuCode,Integer quantity){
         Optional<SKUEntity> skuEntity =skuRepo.findById(skuCode);
         if (skuEntity.isPresent()){
-           InventoryEntity inventoryEntity = inventoryRepo.findById(skuCode).get();
-           if(inventoryEntity.getQuantity()>=quantity) {
+           Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(skuCode);
+           if(inventoryEntity.get().getQuantity()>=quantity && inventoryEntity.isPresent()) {
                CartEntity cartEntity = new CartEntity(quantity,skuEntity.get());
                String productName =productRepo.findById(skuEntity.get().getProductEntity().getProductCode()).get().getProductName();
                cartRepo.save(cartEntity);

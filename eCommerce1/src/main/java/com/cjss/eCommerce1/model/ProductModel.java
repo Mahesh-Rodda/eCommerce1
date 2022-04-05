@@ -1,11 +1,15 @@
 package com.cjss.eCommerce1.model;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotNull;
+@Validated
 public class ProductModel {
     private Integer productCode;
     @NotNull
     private String productName;
+    @Length(min = 10 , max =  100)
     private String description;
 
     public Integer getProductCode() {
