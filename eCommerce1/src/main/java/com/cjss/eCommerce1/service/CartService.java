@@ -31,14 +31,20 @@ public class CartService {
         Optional<SKUEntity> skuEntity =skuRepo.findById(skuCode);
         if (skuEntity.isPresent()){
            Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(skuCode);
-           if(inventoryEntity.get().getQuantity()>=quantity && inventoryEntity.isPresent()) {
+            Optional<CartEntity> cartRepoBySkuEntity = cartRepo.findBySkuEntity(skuEntity.get());
+            if (cartRepoBySkuEntity.isPresent())
+            {
+                cartRepoBySkuEntity.get().setQuantity(cartRepoBySkuEntity.get().getQuantity()+quantity);
+                cartRepo.save(cartRepoBySkuEntity.get());
+                return "PRODUCT NAME : "+skuEntity.get().getProductEntity().getProductName()+"\n SIZE : "+skuEntity.get().getSkuSize()+"\n NO.OF : "+quantity+"\n IS ADDED TO CART SUCCESSFULLY";
+            }
+            else if(inventoryEntity.get().getQuantity()>=quantity && inventoryEntity.isPresent() && !cartRepoBySkuEntity.isPresent()) {
                CartEntity cartEntity = new CartEntity(quantity,skuEntity.get());
-               String productName =productRepo.findById(skuEntity.get().getProductEntity().getProductCode()).get().getProductName();
                cartRepo.save(cartEntity);
-               return "PRODUCT NAME : "+productName+"\n SIZE : "+skuEntity.get().getSkuSize()+"\n NO.OF : "+quantity+"\n IS ADDED TO CART SUCCESSFULLY";
+               return "PRODUCT NAME : "+skuEntity.get().getProductEntity().getProductName()+"\n SIZE : "+skuEntity.get().getSkuSize()+"\n NO.OF : "+quantity+"\n IS ADDED TO CART SUCCESSFULLY";
            }
 
-           return "OUT OF STACK";
+           return "OUT OF STACK \n AVAILABLE STOCK : "+inventoryEntity.get().getQuantity();
     }
         return "SKU CODE IS NOT EXISTS";
     }

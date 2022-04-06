@@ -6,7 +6,6 @@ import com.cjss.eCommerce1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,13 +35,21 @@ public class FulfilmentService {
                 OrderEntity orderEntity = new OrderEntity(quantity, "RECEIVED", skuEntity.get());
                 inventoryEntity.setQuantity(inventoryEntity.getQuantity() - quantity);
                 // when we ordered from cart the element will delete from cart
-               List<CartEntity> a = cartRepo.findByQuantityAndSkuEntity(quantity, skuEntity.get());
-                if (!a.isEmpty()){a.stream().forEach(e -> cartRepo.deleteById(e.getCartCode()));}
+               Optional<CartEntity> cartEntity = cartRepo.findBySkuEntity(skuEntity.get());
+                if (cartEntity.isPresent()){
+                    if(cartEntity.get().getQuantity() == quantity){
+                        cartRepo.deleteById(cartEntity.get().getCartCode());
+                    }
+                    else {
+                        cartEntity.get().setQuantity(cartEntity.get().getQuantity()-quantity);
+                        cartRepo.save(cartEntity.get());
+                    }
+                }
                 inventoryRepo.save(inventoryEntity);
                 orderRepo.save(orderEntity);
                 return "YOUR ORDER " + orderEntity.getOrderCode() + " IS PLACED SUCCESSFULLY";
             }
-            return "OUT OF STOCK";
+            return "OUT OF STACK \n AVAILABLE STOCK : "+inventoryEntity.getQuantity();
         }
         return "SKU CODE NOT EXISTS";
     }
