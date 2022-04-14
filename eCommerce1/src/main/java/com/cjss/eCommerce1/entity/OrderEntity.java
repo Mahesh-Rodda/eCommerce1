@@ -1,6 +1,7 @@
 package com.cjss.eCommerce1.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "TABLE_ORD")
@@ -12,14 +13,23 @@ public class OrderEntity {
     private String orderStatus;
     @ManyToOne(cascade = CascadeType.ALL)
     private SKUEntity skuEntity;
+    @OneToMany(mappedBy = "orderEntity")
+    private List<OrderProducts> orderProducts;
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private UserEntity userEntity;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer quantity, String orderStatus, SKUEntity skuEntity) {
+    public OrderEntity(Integer quantity, String orderStatus, SKUEntity skuEntity, UserEntity userEntity) {
         this.quantity = quantity;
         this.orderStatus = orderStatus;
         this.skuEntity = skuEntity;
+        this.userEntity = userEntity;
+    }
+
+    public OrderEntity(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Integer getOrderCode() {
@@ -52,5 +62,21 @@ public class OrderEntity {
 
     public void setSkuEntity(SKUEntity skuEntity) {
         this.skuEntity = skuEntity;
+    }
+
+    public List<OrderProducts> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProducts> orderProducts) {
+        this.orderProducts = orderProducts;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }

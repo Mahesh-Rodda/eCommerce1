@@ -1,8 +1,10 @@
 package com.cjss.eCommerce1.service;
 
+import com.cjss.eCommerce1.configuration.MyUserDetailsService;
 import com.cjss.eCommerce1.entity.CartEntity;
 import com.cjss.eCommerce1.entity.InventoryEntity;
 import com.cjss.eCommerce1.entity.SKUEntity;
+import com.cjss.eCommerce1.entity.UserEntity;
 import com.cjss.eCommerce1.model.CartModel;
 import com.cjss.eCommerce1.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,14 @@ public class CartService {
     private PriceRepo priceRepo;
     @Autowired
     private InventoryRepo inventoryRepo;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
 
 
     public String addCart(Integer skuCode,Integer quantity){
+        Optional<UserEntity> userEntity = userRepo.findById(myUserDetailsService.id);
         Optional<SKUEntity> skuEntity =skuRepo.findById(skuCode);
         if (skuEntity.isPresent()){
            Optional<InventoryEntity> inventoryEntity = inventoryRepo.findById(skuCode);
@@ -39,7 +46,7 @@ public class CartService {
                 return "PRODUCT NAME : "+skuEntity.get().getProductEntity().getProductName()+"\n SIZE : "+skuEntity.get().getSkuSize()+"\n NO.OF : "+quantity+"\n IS ADDED TO CART SUCCESSFULLY";
             }
             else if(inventoryEntity.get().getQuantity()>=quantity && inventoryEntity.isPresent() && !cartRepoBySkuEntity.isPresent()) {
-               CartEntity cartEntity = new CartEntity(quantity,skuEntity.get());
+               CartEntity cartEntity = new CartEntity(quantity,skuEntity.get(),userEntity.get());
                cartRepo.save(cartEntity);
                return "PRODUCT NAME : "+skuEntity.get().getProductEntity().getProductName()+"\n SIZE : "+skuEntity.get().getSkuSize()+"\n NO.OF : "+quantity+"\n IS ADDED TO CART SUCCESSFULLY";
            }
@@ -49,7 +56,8 @@ public class CartService {
         return "SKU CODE IS NOT EXISTS";
     }
     public List<CartModel> getCartModel(){
-        List<CartEntity> cartEntities = cartRepo.findAll();
+        Optional<UserEntity> userEntity = userRepo.findById(myUserDetailsService.id);
+        List<CartEntity> cartEntities = cartRepo.findByUserEntity(userEntity.get());
         Double[] price={0.0};
         List<CartModel> cartModels =cartEntities.stream().map(cE -> {
              price[0] =price[0]+priceRepo.findById(cE.getSkuEntity().getSkuCode()).get().getPrice()*cE.getQuantity();

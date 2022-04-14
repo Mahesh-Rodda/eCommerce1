@@ -12,13 +12,16 @@ public class CartEntity {
     private Integer quantity;
     @ManyToOne(cascade = CascadeType.DETACH)
     private SKUEntity skuEntity;
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private UserEntity userEntity;
 
     public CartEntity() {
     }
 
-    public CartEntity(Integer quantity, SKUEntity skuEntity) {
+    public CartEntity(Integer quantity, SKUEntity skuEntity, UserEntity userEntity) {
         this.quantity = quantity;
         this.skuEntity = skuEntity;
+        this.userEntity = userEntity;
     }
 
     public Integer getCartCode() {
@@ -43,6 +46,14 @@ public class CartEntity {
 
     public void setSkuEntity(SKUEntity skuEntity) {
         this.skuEntity = skuEntity;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override

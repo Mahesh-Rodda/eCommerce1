@@ -1,5 +1,7 @@
 package com.cjss.eCommerce1.model;
 
+import java.util.List;
+
 public class OrderModel {
     private Integer orderCode;
     private String productName;
@@ -8,8 +10,13 @@ public class OrderModel {
     private Integer quantity;
     private double price;
     private String orderStatus;
+    private List<OrderProModel> orderProModels;
 
-    public OrderModel(Integer orderCode, String productName, Integer skuCode, String skuSize, Integer quantity, double price, String orderStatus) {
+    public OrderModel() {
+    }
+
+    public OrderModel(Integer orderCode, String productName, Integer skuCode, String skuSize, Integer quantity, double price, String orderStatus,List<OrderProModel> orderProModels) {
+        this.orderProModels = orderProModels;
         this.orderCode = orderCode;
         this.productName = productName;
         this.skuCode = skuCode;
@@ -17,6 +24,7 @@ public class OrderModel {
         this.quantity = quantity;
         this.price = price;
         this.orderStatus = orderStatus;
+//        this.orderProModels = orderProModels;
     }
 
     public Integer getOrderCode() {
@@ -73,5 +81,13 @@ public class OrderModel {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public List<OrderProModel> getOrderProModels() {
+        return orderProModels;
+    }
+
+    public void setOrderProModels(List<OrderProModel> orderProModels) {
+        this.orderProModels = orderProModels;
     }
 }

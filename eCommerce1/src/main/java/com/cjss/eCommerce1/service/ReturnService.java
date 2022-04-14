@@ -11,22 +11,11 @@ import java.util.Optional;
 
 @Service
 public class ReturnService {
-    @Autowired
-    private ShippingRepo shippingRepo;
+
     @Autowired
     private OrderRepo orderRepo;
     @Autowired
-    private CartRepo cartRepo;
-    @Autowired
-    private ProductRepo productRepo;
-    @Autowired
-    private SKURepo skuRepo;
-    @Autowired
-    private PriceRepo priceRepo;
-    @Autowired
     private InventoryRepo inventoryRepo;
-    @Autowired
-    private PackingRepo packingRepo;
     @Autowired
     private ReturnRepo returnRepo;
 

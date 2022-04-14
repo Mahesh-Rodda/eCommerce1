@@ -1,6 +1,5 @@
 package com.cjss.eCommerce1.controller;
 
-import com.cjss.eCommerce1.model.OrderModel;
 import com.cjss.eCommerce1.service.FulfilmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +14,8 @@ public class OrderController {
 
     @PostMapping("/place")
     public String placeOrder(@Valid @RequestParam Integer skuCode, @RequestParam Integer quantity) { return fulfilmentService.placeOrder(skuCode, quantity);}
-    @GetMapping("/track")
-    public OrderModel getOrder(@RequestParam Integer orderCode){ return  fulfilmentService.getOrder(orderCode);}
+    @GetMapping("/place/cart")
+    public String placeOrderCart(){ return fulfilmentService.placeOrderByCart();}
+//    @GetMapping("/track")
+//    public List<OrderModel> getOrder(@RequestParam Integer orderCode){ return  fulfilmentService.getOrder(orderCode);}
 }
